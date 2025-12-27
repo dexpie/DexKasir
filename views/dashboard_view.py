@@ -7,6 +7,8 @@ from views.report_view import ReportView
 from views.settings_view import SettingsView
 from views.promo_view import PromoView
 from views.overview_view import OverviewView
+from views.audit_view import AuditView
+from views.opname_view import StockOpnameView
 
 class DashboardView(ctk.CTkToplevel):
     def __init__(self, parent, user):
@@ -65,6 +67,8 @@ class DashboardView(ctk.CTkToplevel):
         self.btn_history = self.create_nav_btn("Riwayat", lambda: self.show_view("history"))
         self.btn_users = self.create_nav_btn("Users", lambda: self.show_view("users"))
         self.btn_promos = self.create_nav_btn("Promos", lambda: self.show_view("promos"))
+        self.btn_opname = self.create_nav_btn("Stock Opname", lambda: self.show_view("opname"))
+        self.btn_audit = self.create_nav_btn("Audit Logs", lambda: self.show_view("audit"))
         self.btn_settings = self.create_nav_btn("Pengaturan", lambda: self.show_view("settings"))
         
         # Role based hiding
@@ -73,6 +77,8 @@ class DashboardView(ctk.CTkToplevel):
             self.btn_products.pack_forget()
             self.btn_users.pack_forget()
             self.btn_promos.pack_forget()
+            self.btn_opname.pack_forget()
+            self.btn_audit.pack_forget()
             self.btn_settings.pack_forget()
             self.btn_history.pack_forget()
 
@@ -110,6 +116,10 @@ class DashboardView(ctk.CTkToplevel):
             PromoView(self.main_frame)
         elif view_name == "overview":
             OverviewView(self.main_frame)
+        elif view_name == "audit":
+            AuditView(self.main_frame)
+        elif view_name == "opname":
+            StockOpnameView(self.main_frame, self.user)
 
     def logout(self):
         self.destroy()
