@@ -21,10 +21,14 @@ class TransactionModel:
 
             # 2. Insert Transaction Items
             for item in items:
+                # Fetch product cost
+                cursor.execute("SELECT cost_price FROM products WHERE id = ?", (item['product_id'],))
+                cost = cursor.fetchone()[0] or 0
+                
                 cursor.execute('''
-                    INSERT INTO transaction_items (transaction_id, product_name, price_at_sale, quantity, subtotal)
-                    VALUES (?, ?, ?, ?, ?)
-                ''', (transaction_id, item['name'], item['price'], item['qty'], item['subtotal']))
+                    INSERT INTO transaction_items (transaction_id, product_name, price_at_sale, quantity, subtotal, cost_at_sale)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                ''', (transaction_id, item['name'], item['price'], item['qty'], item['subtotal'], cost))
                 
                 # 3. Update Product Stock
                 cursor.execute("UPDATE products SET stock = stock - ? WHERE id = ?", (item['qty'], item['product_id']))

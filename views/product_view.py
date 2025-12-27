@@ -40,12 +40,16 @@ class ProductView(ctk.CTkFrame):
         frame_row2 = ctk.CTkFrame(frame_form, fg_color="transparent")
         frame_row2.pack(fill="x", padx=10, pady=10)
 
-        ctk.CTkLabel(frame_row2, text="Harga (Rp)").pack(side="left", padx=5)
-        self.entry_price = ctk.CTkEntry(frame_row2, width=150)
+        ctk.CTkLabel(frame_row2, text="Harga Jual (Rp)").pack(side="left", padx=5)
+        self.entry_price = ctk.CTkEntry(frame_row2, width=120)
         self.entry_price.pack(side="left", padx=5)
 
+        ctk.CTkLabel(frame_row2, text="Modal (Rp)").pack(side="left", padx=5)
+        self.entry_cost = ctk.CTkEntry(frame_row2, width=120)
+        self.entry_cost.pack(side="left", padx=5)
+
         ctk.CTkLabel(frame_row2, text="Stok").pack(side="left", padx=5)
-        self.entry_stock = ctk.CTkEntry(frame_row2, width=100)
+        self.entry_stock = ctk.CTkEntry(frame_row2, width=80)
         self.entry_stock.pack(side="left", padx=5)
 
         # Buttons
@@ -55,7 +59,50 @@ class ProductView(ctk.CTkFrame):
         ctk.CTkButton(frame_buttons, text="Tambah", command=self.add_product, fg_color="#4CAF50", hover_color="#388E3C").pack(side="left", padx=5)
         ctk.CTkButton(frame_buttons, text="Update", command=self.update_product, fg_color="#FF9800", hover_color="#F57C00").pack(side="left", padx=5)
         ctk.CTkButton(frame_buttons, text="Hapus", command=self.delete_product, fg_color="#f44336", hover_color="#d32f2f").pack(side="left", padx=5)
+        ctk.CTkButton(frame_buttons, text="Import Excel", command=self.import_excel, fg_color="#2196F3").pack(side="left", padx=5) # Blue
         ctk.CTkButton(frame_buttons, text="Reset", command=self.reset_form, fg_color="gray").pack(side="left", padx=5)
+
+    def import_excel(self):
+        try:
+            import pandas as pd
+        except ImportError:
+            messagebox.showerror("Error", "Module pandas not installed.")
+            return
+
+        filename = filedialog.askopenfilename(filetypes=[("Excel Files", "*.xlsx;*.xls"), ("CSV Files", "*.csv")])
+        if not filename: return
+        
+        try:
+            if filename.endswith('.csv'):
+                df = pd.read_csv(filename)
+            else:
+                df = pd.read_excel(filename)
+            
+            # Expected columns: Name, Price, Stock, Barcode, Cost
+            required_cols = ['Name', 'Price', 'Stock']
+            for col in required_cols:
+                if col not in df.columns:
+                    messagebox.showerror("Error", f"Format salah! Kolom wajib: {required_cols}")
+                    return
+            
+            success_count = 0
+            for index, row in df.iterrows():
+                name = str(row['Name'])
+                price = float(row['Price'])
+                stock = int(row['Stock'])
+                barcode = str(row['Barcode']) if 'Barcode' in df.columns and pd.notna(row['Barcode']) else None
+                cost = float(row['Cost']) if 'Cost' in df.columns and pd.notna(row['Cost']) else 0
+                
+                # Simple logic: try add, ignore if duplicates (or ideally update)
+                # Here we just try add
+                if self.product_model.add_product(name, price, stock, barcode, cost):
+                    success_count += 1
+            
+            messagebox.showinfo("Import Selesai", f"Berhasil import {success_count} produk.")
+            self.refresh_table()
+            
+        except Exception as e:
+            messagebox.showerror("Import Error", str(e))
 
         # -- Table --
         # CustomTkinter doesn't have a Treeview, so we style the ttk.Treeview
@@ -72,19 +119,21 @@ class ProductView(ctk.CTkFrame):
         frame_table = ctk.CTkFrame(self)
         frame_table.pack(fill="both", expand=True, pady=10)
 
-        columns = ('id', 'barcode', 'name', 'price', 'stock')
+        columns = ('id', 'barcode', 'name', 'price', 'cost', 'stock')
         self.tree = ttk.Treeview(frame_table, columns=columns, show='headings')
         
         self.tree.heading('id', text='ID')
         self.tree.heading('barcode', text='Barcode')
         self.tree.heading('name', text='Nama Produk')
-        self.tree.heading('price', text='Harga')
+        self.tree.heading('price', text='Harga Jual')
+        self.tree.heading('cost', text='Modal')
         self.tree.heading('stock', text='Stok')
 
         self.tree.column('id', width=40)
         self.tree.column('barcode', width=100)
         self.tree.column('name', width=200)
         self.tree.column('price', width=100)
+        self.tree.column('cost', width=100)
         self.tree.column('stock', width=60)
 
         self.tree.pack(fill="both", expand=True, padx=2, pady=2)
@@ -111,13 +160,15 @@ class ProductView(ctk.CTkFrame):
         products = self.product_model.get_all_products()
         for p in products:
             barcode = p.get('barcode') or ""
+            cost = p.get('cost_price', 0)
             tags = ('low_stock',) if p['stock'] < 5 else ()
-            self.tree.insert('', tk.END, values=(p['id'], barcode, p['name'], format_rupiah(p['price']), p['stock']), tags=tags)
+            self.tree.insert('', tk.END, values=(p['id'], barcode, p['name'], format_rupiah(p['price']), format_rupiah(cost), p['stock']), tags=tags)
 
     def reset_form(self):
         self.entry_barcode.delete(0, tk.END)
         self.entry_name.delete(0, tk.END)
         self.entry_price.delete(0, tk.END)
+        self.entry_cost.delete(0, tk.END)
         self.entry_stock.delete(0, tk.END)
         self.selected_id = None
 
@@ -129,6 +180,7 @@ class ProductView(ctk.CTkFrame):
         item = self.tree.item(selected_item)
         values = item['values']
         
+        # values: id, barcode, name, price_str, cost_str, stock
         self.selected_id = values[0]
         
         self.entry_barcode.delete(0, tk.END)
@@ -141,13 +193,18 @@ class ProductView(ctk.CTkFrame):
         self.entry_price.delete(0, tk.END)
         self.entry_price.insert(0, price_str)
         
+        cost_str = str(values[4]).replace("Rp ", "").replace(".", "")
+        self.entry_cost.delete(0, tk.END)
+        self.entry_cost.insert(0, cost_str)
+        
         self.entry_stock.delete(0, tk.END)
-        self.entry_stock.insert(0, values[4])
+        self.entry_stock.insert(0, values[5])
 
     def add_product(self):
         barcode = self.entry_barcode.get()
         name = self.entry_name.get()
         price = self.entry_price.get()
+        cost = self.entry_cost.get()
         stock = self.entry_stock.get()
 
         if not name or not price or not stock:
@@ -157,7 +214,8 @@ class ProductView(ctk.CTkFrame):
         try:
             price = float(price)
             stock = int(stock)
-            if self.product_model.add_product(name, price, stock, barcode):
+            cost = float(cost) if cost else 0
+            if self.product_model.add_product(name, price, stock, barcode, cost):
                 messagebox.showinfo("Success", "Produk berhasil ditambahkan")
                 self.reset_form()
                 self.refresh_table()
@@ -174,12 +232,14 @@ class ProductView(ctk.CTkFrame):
         barcode = self.entry_barcode.get()
         name = self.entry_name.get()
         price = self.entry_price.get()
+        cost = self.entry_cost.get()
         stock = self.entry_stock.get()
 
         try:
             price = float(price)
             stock = int(stock)
-            if self.product_model.update_product(self.selected_id, name, price, stock, barcode):
+            cost = float(cost) if cost else 0
+            if self.product_model.update_product(self.selected_id, name, price, stock, barcode, cost):
                 messagebox.showinfo("Success", "Produk berhasil diupdate")
                 self.reset_form()
                 self.refresh_table()

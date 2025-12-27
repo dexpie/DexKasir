@@ -22,11 +22,11 @@ class ProductModel:
             return dict(product)
         return None
 
-    def add_product(self, name, price, stock, barcode=None):
+    def add_product(self, name, price, stock, barcode=None, cost_price=0):
         self.db.connect()
         cursor = self.db.conn.cursor()
         try:
-            cursor.execute("INSERT INTO products (name, price, stock, barcode) VALUES (?, ?, ?, ?)", (name, price, stock, barcode))
+            cursor.execute("INSERT INTO products (name, price, stock, barcode, cost_price) VALUES (?, ?, ?, ?, ?)", (name, price, stock, barcode, cost_price))
             self.db.conn.commit()
             return True
         except Exception as e:
@@ -35,11 +35,11 @@ class ProductModel:
         finally:
             self.db.close()
 
-    def update_product(self, product_id, name, price, stock, barcode=None):
+    def update_product(self, product_id, name, price, stock, barcode=None, cost_price=0):
         self.db.connect()
         cursor = self.db.conn.cursor()
         try:
-            cursor.execute("UPDATE products SET name = ?, price = ?, stock = ?, barcode = ? WHERE id = ?", (name, price, stock, barcode, product_id))
+            cursor.execute("UPDATE products SET name = ?, price = ?, stock = ?, barcode = ?, cost_price = ? WHERE id = ?", (name, price, stock, barcode, cost_price, product_id))
             self.db.conn.commit()
             return True
         except Exception as e:

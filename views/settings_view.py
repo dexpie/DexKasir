@@ -1,6 +1,7 @@
 import customtkinter as ctk
 from models.settings import SettingsModel
-from tkinter import messagebox
+from models.shift import ShiftModel
+from tkinter import messagebox, simpledialog
 
 class SettingsView(ctk.CTkFrame):
     def __init__(self, parent):
@@ -8,6 +9,7 @@ class SettingsView(ctk.CTkFrame):
         self.pack(fill="both", expand=True)
         
         self.settings_model = SettingsModel()
+        self.shift_model = ShiftModel()
         self.create_widgets()
         self.load_current_settings()
 
@@ -40,11 +42,48 @@ class SettingsView(ctk.CTkFrame):
         # Backup Button
         ctk.CTkButton(self, text="Backup Database", command=self.backup_database, fg_color="#2196F3").pack(anchor="w", padx=20, pady=(0, 20))
 
+        # Shift Management
+        ctk.CTkLabel(self, text="Manajemen Kasir (Shift)", font=("Roboto Medium", 16)).pack(anchor="w", padx=20, pady=(10, 10))
+        frame_shift = ctk.CTkFrame(self, fg_color="transparent")
+        frame_shift.pack(anchor="w", padx=20)
+        
+        ctk.CTkButton(frame_shift, text="Buka Kasir (Start Shift)", command=self.open_shift).pack(side="left", padx=5)
+        ctk.CTkButton(frame_shift, text="Tutup Kasir (End Shift)", command=self.close_shift, fg_color="#f44336").pack(side="left", padx=5)
+
     def load_current_settings(self):
         self.entry_store_name.insert(0, self.settings_model.get("store_name"))
         self.entry_address.insert(0, self.settings_model.get("store_address"))
         self.entry_tax.insert(0, str(self.settings_model.get("tax_rate")))
         self.combo_theme.set(self.settings_model.get("theme"))
+
+    def open_shift(self):
+        current = self.shift_model.get_current_shift()
+        if current:
+            messagebox.showinfo("Info", "Shift Kasir sudah terbuka!")
+            return
+            
+        start_cash = simpledialog.askfloat("Buka Kasir", "Masukkan Modal Awal (Cash):", parent=self)
+        if start_cash is not None:
+            success, msg = self.shift_model.start_shift("Admin", start_cash) # Idealnya pakai user login
+            if success:
+                messagebox.showinfo("Success", "Shift Kasir DIBUKA. Selamat bekerja!")
+            else:
+                messagebox.showerror("Error", msg)
+
+    def close_shift(self):
+        current = self.shift_model.get_current_shift()
+        if not current:
+            messagebox.showwarning("Warning", "Belum ada shift yang aktif.")
+            return
+            
+        end_cash = simpledialog.askfloat("Tutup Kasir", "Masukkan Total Uang Fisik:", parent=self)
+        if end_cash is not None:
+            success, msg = self.shift_model.close_shift(current['id'], end_cash)
+            if success:
+                diff = end_cash - current['start_cash'] # Simple diff, ideally +Sales
+                messagebox.showinfo("Success", f"Shift DITUTUP. Selisih dari modal: {diff:,.0f}")
+            else:
+                messagebox.showerror("Error", msg)
 
     def backup_database(self):
         import shutil
