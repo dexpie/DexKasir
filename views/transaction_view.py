@@ -1,5 +1,6 @@
 import customtkinter as ctk
 import tkinter as tk
+from datetime import datetime
 from tkinter import ttk, messagebox, simpledialog
 from models.product import ProductModel
 from models.transaction import TransactionModel
@@ -390,7 +391,27 @@ class TransactionView(ctk.CTkFrame):
                 else:
                     msg += f"\nGagal cetak struk: {filename}"
                     
-                messagebox.showinfo("Sukses", msg)
+                # WA Share Option
+                share_wa = messagebox.askyesno("Sukses", msg + "\n\nKirim struk via WhatsApp?")
+                if share_wa:
+                    import webbrowser
+                    import urllib.parse
+                    
+                    # Target Phone
+                    target = self.current_member['phone'] if self.current_member else ""
+                    if not target:
+                        target = simpledialog.askstring("WhatsApp", "Masukkan Nomor HP (+62...):", parent=self)
+                    
+                    if target:
+                        # Construct Message
+                        wa_text = f"Strur Belanja DexKasir\n{self.settings_model.get('store_name')}\n"
+                        wa_text += f"Date: {datetime.now().strftime('%Y-%m-%d')}\n"
+                        wa_text += f"Total: {format_rupiah(self.final_total)}\n"
+                        wa_text += "Terima kasih!"
+                        
+                        encoded = urllib.parse.quote(wa_text)
+                        url = f"https://wa.me/{target}?text={encoded}"
+                        webbrowser.open(url)
                 
                 self.cart = []
                 self.current_member = None

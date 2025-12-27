@@ -11,12 +11,13 @@
 *   **Cart Management**: Edit quantities, apply discounts per item or total.
 *   **Flexible Payment**: Support CASH, QRIS, and TRANSFER methods.
 *   **Receipt Printing**: Auto-generate text receipts (`.txt`) and Digital QR receipts (`.png`).
+*   **WhatsApp Share**: Send digital receipts directly to customer's WhatsApp with one click. 🆕
 
 ### 2. **Inventory Management**
 *   **CRUD Products**: Add, edit, delete products easily.
 *   **Barcode Support**: Scan existing barcodes or **Generate New Barcode Labels**.
 *   **Bulk Import**: Upload hundreds of products via **Excel/CSV**.
-*   **Low Stock Alert**: Visual highlights when stock runs low (< 5).
+*   **Low Stock Alert**: Visual highlights and **Dashboard Widgets** when stock runs low (< 5).
 
 ### 3. **Membership & Loyalty** 💎
 *   **Member Database**: Register customers by name & phone.
@@ -24,13 +25,13 @@
 *   **Quick Lookup**: Find members by phone number during transaction.
 
 ### 4. **Business Intelligence (Profit & Ops)** 📈
+*   **Command Center Dashboard**: Real-time view of **Daily Sales**, **Transaction Count**, and **Stock Alerts**. 🆕
 *   **Profit Tracking**: Input **Cost Price (Modal)** and track **Net Profit** automatically.
 *   **Shift Management**: "Open Shift" to record start cash and "Close Shift" to verify actual cash vs system.
 *   **Reports**: Monthly sales report, export to **PDF & Excel**.
-*   **Analytics**: Visual charts for Sales Trend (7 Days) and Top Products.
 
 ### 5. **Marketing & Customization** 🎨
-*   **Promo Codes**: Create discount codes (Percentage or Fixed Amount) to boost sales (e.g., `DISKON50`).
+*   **Promo Management**: Dedicated menu to Create/Edit/Delete promo codes (Percentage or Fixed). 🆕
 *   **Receipt Branding**: Customize receipt **Header** (Greeting) and **Footer** (Thank You Message).
 *   **Themes**: Switch between Light, Dark, or System theme.
 
@@ -59,8 +60,8 @@
 
 ## 📂 Project Structure
 *   `main.py`: Entry point.
-*   `views/`: UI Components (Transaction, History, Settings, etc.).
-*   `models/`: Database logic (Product, User, Transaction, Member, etc.).
+*   `views/`: UI Components (Promo, Overview, Transaction, etc.).
+*   `models/`: Database logic (Promo, Product, User, etc.).
 *   `utils/`: Helpers (Printer, PDF Generator, Migrations).
 *   `database/`: SQLite connection & initialization.
 *   `receipts/`: Saved receipt files.

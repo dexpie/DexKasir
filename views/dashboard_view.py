@@ -5,7 +5,8 @@ from views.history_view import HistoryView
 from views.transaction_view import TransactionView
 from views.report_view import ReportView
 from views.settings_view import SettingsView
-from views.user_view import UserView
+from views.promo_view import PromoView
+from views.overview_view import OverviewView
 
 class DashboardView(ctk.CTkToplevel):
     def __init__(self, parent, user):
@@ -26,7 +27,7 @@ class DashboardView(ctk.CTkToplevel):
         
         # Default view
         if user['role'] == 'admin':
-            self.show_view("report") # Default to report/dashboard for admin
+            self.show_view("overview") # Default to home
             self.check_low_stock()
         else:
             self.show_view("cashier")
@@ -57,11 +58,13 @@ class DashboardView(ctk.CTkToplevel):
         logo.pack(pady=30)
         
         # Buttons
-        self.btn_dashboard = self.create_nav_btn("Dashboard", lambda: self.show_view("report"))
+        self.btn_dashboard = self.create_nav_btn("Dashboard", lambda: self.show_view("overview"))
         self.btn_cashier = self.create_nav_btn("Kasir", lambda: self.show_view("cashier"))
+        self.btn_report = self.create_nav_btn("Laporan", lambda: self.show_view("report")) # Separate Report btn
         self.btn_products = self.create_nav_btn("Produk", lambda: self.show_view("products"))
         self.btn_history = self.create_nav_btn("Riwayat", lambda: self.show_view("history"))
         self.btn_users = self.create_nav_btn("Users", lambda: self.show_view("users"))
+        self.btn_promos = self.create_nav_btn("Promos", lambda: self.show_view("promos"))
         self.btn_settings = self.create_nav_btn("Pengaturan", lambda: self.show_view("settings"))
         
         # Role based hiding
@@ -69,6 +72,7 @@ class DashboardView(ctk.CTkToplevel):
             self.btn_dashboard.pack_forget()
             self.btn_products.pack_forget()
             self.btn_users.pack_forget()
+            self.btn_promos.pack_forget()
             self.btn_settings.pack_forget()
             self.btn_history.pack_forget()
 
@@ -102,6 +106,10 @@ class DashboardView(ctk.CTkToplevel):
             SettingsView(self.main_frame)
         elif view_name == "users":
             UserView(self.main_frame)
+        elif view_name == "promos":
+            PromoView(self.main_frame)
+        elif view_name == "overview":
+            OverviewView(self.main_frame)
 
     def logout(self):
         self.destroy()
