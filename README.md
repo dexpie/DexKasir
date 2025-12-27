@@ -1,41 +1,39 @@
 # DexKasir 🏪
 
-**DexKasir** is a modern, feature-rich Point of Sale (POS) application built with Python (`CustomTkinter`). It is designed for enterprise-level retail management with strong security, AI features, and dual-screen support.
+**DexKasir** is a modern, feature-rich Point of Sale (POS) application built for businesses that demand efficiency, security, and smart insights.
 
 ![DexKasir Screenshot](https://via.placeholder.com/800x450?text=DexKasir+Dashboard)
 
 ## 🚀 Key Features
 
-### 1. **Core Transaction System (with Dual Screen)** 🖥️
-*   **Customer Facing Display (CFD)**: Open a second window for customers to see cart items and total in real-time.
-*   **Fast Checkout**: Scan barcodes or search products instantly.
-*   **Flexible Payment**: Support CASH, QRIS, and TRANSFER methods.
-*   **WhatsApp Share**: Send digital receipts directly to customer's WhatsApp.
+### 1. **Core Transaction & Finance** 💸
+*   **Kasbon System**: Allow trusted members to **pay later**. Manage debts and payments directly in the app. 🆕
+*   **Automated Email Reports**: Send daily sales recap PDF to the owner's email automatically on Shift Close. 🆕
+*   **Flexible Payment**: CASH, QRIS, TRANSFER, and KASBON.
 
 ### 2. **Artificial Intelligence (AI)** 🤖
-*   **Sales Forecasting**: Uses Linear Regression to predict sales trend for the next 7 days based on history.
+*   **Sales Forecasting**: Uses Linear Regression to predict sales trend for the next 7 days.
 *   **Smart Dashboard**: Overview card showing predicted vs actual performance.
 
 ### 3. **Security & Loss Prevention** 👮‍♂️
-*   **Audit Logger**: Records every sensitive action (Login, Delete Product, Void) with timestamp and user details. 🆕
-*   **Stock Opname**: Feature to reconcile Physical Stock vs System Stock and automatically adjust variances. 🆕
+*   **Audit Logger**: Records every sensitive action (Login, Delete Product, Void).
+*   **Stock Opname**: Feature to reconcile Physical Stock vs System Stock.
 
-### 4. **Inventory Management**
+### 4. **Hardware Support** 🖥️
+*   **Dual Screen**: Customer Facing Display (CFD) for real-time cart visibility.
+*   **Receipt Printer**: Auto-print receipt + Generate QR Code.
+
+### 5. **Inventory Management**
 *   **CRUD Products**: Add, edit, delete products easily.
 *   **Barcode Generator**: Generate and print custom barcode labels.
 *   **Bulk Import**: Upload hundreds of products via **Excel/CSV**.
 *   **Low Stock Alert**: Visual highlights and dashboard widgets.
 
-### 5. **Business Intelligence (Profit & Ops)** 📈
-*   **Command Center Dashboard**: Real-time stats for Omzet, Transactions, and Stock.
-*   **Profit Tracking**: Track Net Profit (Revenue - Cost).
-*   **Shift Management**: Manage Cash Drawer sessions (Open/Close).
-*   **Reports**: Export to PDF & Excel.
-
-### 6. **Marketing & Branding** 🎨
-*   **Promo Management**: Manage discount codes (`DISKON50`).
-*   **Receipt Branding**: Customize receipt Header/Footer.
-*   **Themes**: Light / Dark Mode.
+## 🛠️ Configuration (Email)
+To use Automated Email Reports, go to **Settings** and configure:
+*   **Email Sender**: Your Gmail address.
+*   **App Password**: Google Account > Security > App Passwords (NOT your login password).
+*   **Recipient**: Owner's email.
 
 ## 🛠️ Installation
 
@@ -49,7 +47,6 @@
     ```bash
     pip install -r requirements.txt
     ```
-    *(Requirements: customtkinter, pillow, matplotlib, pandas, openpyxl, reportlab, qrcode, python-barcode)*
 
 3.  **Run Application**
     ```bash

@@ -36,6 +36,19 @@ class SettingsView(ctk.CTkFrame):
         self.entry_receipt_footer = ctk.CTkEntry(self, width=400)
         self.entry_receipt_footer.pack(anchor="w", padx=20, pady=(0, 10))
 
+        # Email Settings
+        ctk.CTkLabel(self, text="Email Sender (Gmail)").pack(anchor="w", padx=20)
+        self.entry_email = ctk.CTkEntry(self, width=300)
+        self.entry_email.pack(anchor="w", padx=20)
+        
+        ctk.CTkLabel(self, text="App Password (Not login pwd)").pack(anchor="w", padx=20)
+        self.entry_email_pwd = ctk.CTkEntry(self, width=300, show="*")
+        self.entry_email_pwd.pack(anchor="w", padx=20)
+        
+        ctk.CTkLabel(self, text="Email Recipient (Owner)").pack(anchor="w", padx=20)
+        self.entry_email_dest = ctk.CTkEntry(self, width=300)
+        self.entry_email_dest.pack(anchor="w", padx=20, pady=(0,10))
+
         # Tax Rate
         ctk.CTkLabel(self, text="Pajak PPN (%)").pack(anchor="w", padx=20)
         self.entry_tax = ctk.CTkEntry(self, width=100)
@@ -66,6 +79,11 @@ class SettingsView(ctk.CTkFrame):
         # Add defaults if key missing to avoid error
         self.entry_receipt_header.insert(0, self.settings_model.get("receipt_header") or "Selamat Datang")
         self.entry_receipt_footer.insert(0, self.settings_model.get("receipt_footer") or "Terima Kasih")
+        
+        self.entry_email.insert(0, self.settings_model.get("email_sender") or "")
+        self.entry_email_pwd.insert(0, self.settings_model.get("email_password") or "")
+        self.entry_email_dest.insert(0, self.settings_model.get("email_recipient") or "")
+        
         self.entry_tax.insert(0, str(self.settings_model.get("tax_rate")))
         self.combo_theme.set(self.settings_model.get("theme"))
 
@@ -126,6 +144,11 @@ class SettingsView(ctk.CTkFrame):
         addr = self.entry_address.get()
         header = self.entry_receipt_header.get()
         footer = self.entry_receipt_footer.get()
+        
+        email = self.entry_email.get()
+        pwd = self.entry_email_pwd.get()
+        dest = self.entry_email_dest.get()
+        
         tax = self.entry_tax.get()
         theme = self.combo_theme.get()
         
@@ -139,6 +162,11 @@ class SettingsView(ctk.CTkFrame):
         self.settings_model.set("store_address", addr)
         self.settings_model.set("receipt_header", header)
         self.settings_model.set("receipt_footer", footer)
+        
+        self.settings_model.set("email_sender", email)
+        self.settings_model.set("email_password", pwd)
+        self.settings_model.set("email_recipient", dest)
+        
         self.settings_model.set("tax_rate", tax_val)
         self.settings_model.set("theme", theme)
         

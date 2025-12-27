@@ -9,6 +9,7 @@ from views.promo_view import PromoView
 from views.overview_view import OverviewView
 from views.audit_view import AuditView
 from views.opname_view import StockOpnameView
+from views.member_view import MemberView
 
 class DashboardView(ctk.CTkToplevel):
     def __init__(self, parent, user):
@@ -65,6 +66,7 @@ class DashboardView(ctk.CTkToplevel):
         self.btn_report = self.create_nav_btn("Laporan", lambda: self.show_view("report")) # Separate Report btn
         self.btn_products = self.create_nav_btn("Produk", lambda: self.show_view("products"))
         self.btn_history = self.create_nav_btn("Riwayat", lambda: self.show_view("history"))
+        self.btn_members = self.create_nav_btn("Members", lambda: self.show_view("members"))
         self.btn_users = self.create_nav_btn("Users", lambda: self.show_view("users"))
         self.btn_promos = self.create_nav_btn("Promos", lambda: self.show_view("promos"))
         self.btn_opname = self.create_nav_btn("Stock Opname", lambda: self.show_view("opname"))
@@ -120,6 +122,8 @@ class DashboardView(ctk.CTkToplevel):
             AuditView(self.main_frame)
         elif view_name == "opname":
             StockOpnameView(self.main_frame, self.user)
+        elif view_name == "members":
+            MemberView(self.main_frame)
 
     def logout(self):
         self.destroy()
