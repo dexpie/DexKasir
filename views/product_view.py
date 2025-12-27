@@ -60,7 +60,34 @@ class ProductView(ctk.CTkFrame):
         ctk.CTkButton(frame_buttons, text="Update", command=self.update_product, fg_color="#FF9800", hover_color="#F57C00").pack(side="left", padx=5)
         ctk.CTkButton(frame_buttons, text="Hapus", command=self.delete_product, fg_color="#f44336", hover_color="#d32f2f").pack(side="left", padx=5)
         ctk.CTkButton(frame_buttons, text="Import Excel", command=self.import_excel, fg_color="#2196F3").pack(side="left", padx=5) # Blue
+        ctk.CTkButton(frame_buttons, text="Generate Label", command=self.generate_barcode_label, fg_color="#607D8B").pack(side="left", padx=5) # Grey
         ctk.CTkButton(frame_buttons, text="Reset", command=self.reset_form, fg_color="gray").pack(side="left", padx=5)
+
+    def generate_barcode_label(self):
+        try:
+            import barcode
+            from barcode.writer import ImageWriter
+        except ImportError:
+            messagebox.showerror("Error", "Module python-barcode not installed.")
+            return
+
+        code = self.entry_barcode.get()
+        if not code:
+            messagebox.showwarning("Warning", "Isi kode barcode dulu!")
+            return
+            
+        try:
+            # Use Code128 format
+            EAN = barcode.get_barcode_class('code128')
+            ean = EAN(code, writer=ImageWriter())
+            
+            # Save file
+            filename = filedialog.asksaveasfilename(defaultextension=".png", filetypes=[("PNG files", "*.png")], initialfile=f"barcode_{code}")
+            if filename:
+                ean.save(filename.replace('.png', '')) # Lib adds extension automatically usually, but we play safe
+                messagebox.showinfo("Success", f"Barcode tersimpan di:\n{filename}")
+        except Exception as e:
+            messagebox.showerror("Error", f"Gagal membuat barcode: {e}")
 
     def import_excel(self):
         try:

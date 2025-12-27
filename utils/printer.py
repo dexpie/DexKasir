@@ -12,10 +12,14 @@ class ReceiptPrinter:
         address = self.settings.get("store_address")
         date_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+        header_msg = self.settings.get("receipt_header") or "Selamat Datang"
+        footer_msg = self.settings.get("receipt_footer") or "Terima Kasih"
+
         # Basic text receipt formatting
         receipt_lines = []
         receipt_lines.append(f"{store_name.center(32)}")
         receipt_lines.append(f"{address.center(32)}")
+        receipt_lines.append(f"{header_msg.center(32)}")
         receipt_lines.append("-" * 32)
         receipt_lines.append(f"Date: {date_str}")
         receipt_lines.append(f"TxID: {transaction_id}")
@@ -37,7 +41,7 @@ class ReceiptPrinter:
         receipt_lines.append(f"Tax      : {tax:>15,.0f}")
         receipt_lines.append(f"TOTAL    : {total:>15,.0f}")
         receipt_lines.append("-" * 32)
-        receipt_lines.append("Thank You!".center(32))
+        receipt_lines.append(f"{footer_msg.center(32)}")
         
         receipt_lines.append("-" * 32)
         receipt_lines.append("Scan for digital receipt:")

@@ -26,6 +26,16 @@ class SettingsView(ctk.CTkFrame):
         self.entry_address = ctk.CTkEntry(self, width=400)
         self.entry_address.pack(anchor="w", padx=20, pady=(0, 10))
 
+        # Subheader (Receipt)
+        ctk.CTkLabel(self, text="Header Struk (Pesan Pembuka)").pack(anchor="w", padx=20)
+        self.entry_receipt_header = ctk.CTkEntry(self, width=400)
+        self.entry_receipt_header.pack(anchor="w", padx=20, pady=(0, 10))
+
+        # Footer (Receipt)
+        ctk.CTkLabel(self, text="Footer Struk (Pesan Penutup)").pack(anchor="w", padx=20)
+        self.entry_receipt_footer = ctk.CTkEntry(self, width=400)
+        self.entry_receipt_footer.pack(anchor="w", padx=20, pady=(0, 10))
+
         # Tax Rate
         ctk.CTkLabel(self, text="Pajak PPN (%)").pack(anchor="w", padx=20)
         self.entry_tax = ctk.CTkEntry(self, width=100)
@@ -53,6 +63,9 @@ class SettingsView(ctk.CTkFrame):
     def load_current_settings(self):
         self.entry_store_name.insert(0, self.settings_model.get("store_name"))
         self.entry_address.insert(0, self.settings_model.get("store_address"))
+        # Add defaults if key missing to avoid error
+        self.entry_receipt_header.insert(0, self.settings_model.get("receipt_header") or "Selamat Datang")
+        self.entry_receipt_footer.insert(0, self.settings_model.get("receipt_footer") or "Terima Kasih")
         self.entry_tax.insert(0, str(self.settings_model.get("tax_rate")))
         self.combo_theme.set(self.settings_model.get("theme"))
 
@@ -111,6 +124,8 @@ class SettingsView(ctk.CTkFrame):
     def save_settings(self):
         name = self.entry_store_name.get()
         addr = self.entry_address.get()
+        header = self.entry_receipt_header.get()
+        footer = self.entry_receipt_footer.get()
         tax = self.entry_tax.get()
         theme = self.combo_theme.get()
         
@@ -122,6 +137,8 @@ class SettingsView(ctk.CTkFrame):
             
         self.settings_model.set("store_name", name)
         self.settings_model.set("store_address", addr)
+        self.settings_model.set("receipt_header", header)
+        self.settings_model.set("receipt_footer", footer)
         self.settings_model.set("tax_rate", tax_val)
         self.settings_model.set("theme", theme)
         

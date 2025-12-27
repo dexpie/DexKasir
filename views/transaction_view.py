@@ -10,6 +10,8 @@ from utils.printer import ReceiptPrinter
 
 from models.member import MemberModel
 
+from models.promo import PromoModel
+
 class TransactionView(ctk.CTkFrame):
     def __init__(self, parent, user):
         super().__init__(parent, fg_color="transparent")
@@ -20,10 +22,12 @@ class TransactionView(ctk.CTkFrame):
         self.transaction_model = TransactionModel()
         self.settings_model = SettingsModel()
         self.member_model = MemberModel()
+        self.promo_model = PromoModel()
         self.printer = ReceiptPrinter(self.settings_model)
         
         self.cart = []
         self.discount_percent = 0
+        self.promo_discount = 0 # Rupiah value from promo code
         self.tax_percent = self.settings_model.get("tax_rate")
         self.current_subtotal = 0
         self.current_member = None # Store member dict if found
@@ -113,19 +117,18 @@ class TransactionView(ctk.CTkFrame):
         self.tree_cart.column('subtotal', width=80)
         self.tree_cart.pack(fill="both", expand=True)
 
-        # Controls
+        # Controls (Remove Item & Promo)
         frame_controls = ctk.CTkFrame(frame_right, fg_color="transparent")
         frame_controls.pack(fill="x", padx=10, pady=5)
         
         ctk.CTkButton(frame_controls, text="Hapus Item", command=self.remove_from_cart, fg_color="#f44336", hover_color="#d32f2f").pack(side="left", fill="x", expand=True, padx=(0,5))
         
-        # Discount Input
-        frame_disc = ctk.CTkFrame(frame_controls, fg_color="transparent")
-        frame_disc.pack(side="right")
-        self.entry_discount = ctk.CTkEntry(frame_disc, width=50, placeholder_text="%")
-        self.entry_discount.insert(0, "0")
-        self.entry_discount.pack(side="left", padx=5)
-        ctk.CTkButton(frame_disc, text="Set Disc", width=60, command=self.update_totals).pack(side="left")
+        # Promo Input
+        frame_promo = ctk.CTkFrame(frame_controls, fg_color="transparent")
+        frame_promo.pack(side="right")
+        self.entry_promo = ctk.CTkEntry(frame_promo, width=100, placeholder_text="Kode Promo")
+        self.entry_promo.pack(side="left", padx=5)
+        ctk.CTkButton(frame_promo, text="Apply", width=60, command=self.apply_promo, fg_color="#E91E63").pack(side="left") # Pink for promo
 
         # Summary
         frame_summary = ctk.CTkFrame(frame_right, fg_color="transparent")
@@ -251,23 +254,51 @@ class TransactionView(ctk.CTkFrame):
             self.current_subtotal += item['subtotal']
         self.update_totals()
 
-    def update_totals(self):
-        try:
-            disc_p = float(self.entry_discount.get())
-        except ValueError:
-            disc_p = 0
+    def apply_promo(self):
+        code = self.entry_promo.get().strip().upper()
+        if not code:
+            self.promo_discount = 0
+            messagebox.showinfo("Info", "Promo dihapus")
+            self.update_totals()
+            return
             
-        self.discount_amount = self.current_subtotal * (disc_p / 100)
+        promo = self.promo_model.get_promo(code)
+        if promo:
+            if promo['type'] == 'PERCENT':
+                self.promo_discount = self.current_subtotal * (promo['value'] / 100)
+            else: # FIXED
+                self.promo_discount = promo['value']
+            
+            messagebox.showinfo("Success", f"Promo {code} Applied! Hemat {format_rupiah(self.promo_discount)}")
+            self.update_totals()
+        else:
+            self.promo_discount = 0
+            messagebox.showerror("Error", "Kode Promo tidak valid / kadaluarsa")
+            self.update_totals()
+
+    def update_totals(self):
+        # Discount from promo has priority over manual percent
+        if self.promo_discount > 0:
+            self.discount_amount = self.promo_discount
+        else:
+            # Fallback to manual percent if available (though removed from UI in this step, kept logic safe)
+            self.discount_amount = 0
+            
         taxable_amount = self.current_subtotal - self.discount_amount
         self.tax_amount = taxable_amount * (self.tax_percent / 100)
         self.final_total = taxable_amount + self.tax_amount
         
         self.lbl_subtotal.configure(text=f"Subtotal: {format_rupiah(self.current_subtotal)}")
-        self.lbl_discount.configure(text=f"Diskon ({disc_p}%): -{format_rupiah(self.discount_amount)}")
+        
+        disc_text = f"Diskon: -{format_rupiah(self.discount_amount)}"
+        if self.promo_discount > 0:
+            disc_text += " (PROMO)"
+        self.lbl_discount.configure(text=disc_text)
+        
         self.lbl_tax.configure(text=f"Pajak ({self.tax_percent}%): +{format_rupiah(self.tax_amount)}")
         self.lbl_total.configure(text=f"TOTAL: {format_rupiah(self.final_total)}")
         self.calculate_change()
-
+    
     def calculate_change(self, event=None):
         try:
             pay = float(self.entry_pay.get())
