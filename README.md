@@ -7,33 +7,33 @@
 ## 🚀 Key Features
 
 ### 1. **Core Transaction & Finance** 💸
-*   **Kasbon System**: Allow trusted members to **pay later**. Manage debts and payments directly in the app. 🆕
-*   **Automated Email Reports**: Send daily sales recap PDF to the owner's email automatically on Shift Close. 🆕
-*   **Flexible Payment**: CASH, QRIS, TRANSFER, and KASBON.
+*   **Kasbon System**: Manage member debts directly.
+*   **Automated Email Reports**: Daily sales recap sent to owner.
+*   **Speed Mode (Hotkeys)**: Use `F1` (Search), `F2` (Barcode), `F4` (Pay) for lightning-fast checkout. 🆕
 
-### 2. **Artificial Intelligence (AI)** 🤖
-*   **Sales Forecasting**: Uses Linear Regression to predict sales trend for the next 7 days.
+### 2. **HR & People Management** 👥
+*   **Employee Attendance**: Digital Clock In/Clock Out system for staff. 🆕
+*   **Sales Gamification**: Visual Progress Bar showing Real-time Sales vs Daily Target to motivate team. 🆕
+
+### 3. **Artificial Intelligence (AI)** 🤖
+*   **Sales Forecasting**: Uses Linear Regression to predict sales trend.
 *   **Smart Dashboard**: Overview card showing predicted vs actual performance.
 
-### 3. **Security & Loss Prevention** 👮‍♂️
-*   **Audit Logger**: Records every sensitive action (Login, Delete Product, Void).
-*   **Stock Opname**: Feature to reconcile Physical Stock vs System Stock.
-
 ### 4. **Hardware Support** 🖥️
-*   **Dual Screen**: Customer Facing Display (CFD) for real-time cart visibility.
+*   **Dual Screen**: Customer Facing Display (CFD).
 *   **Receipt Printer**: Auto-print receipt + Generate QR Code.
 
-### 5. **Inventory Management**
-*   **CRUD Products**: Add, edit, delete products easily.
-*   **Barcode Generator**: Generate and print custom barcode labels.
-*   **Bulk Import**: Upload hundreds of products via **Excel/CSV**.
-*   **Low Stock Alert**: Visual highlights and dashboard widgets.
+### 5. **Security & Loss Prevention** 👮‍♂️
+*   **Audit Logger**: Records every sensitive action.
+*   **Stock Opname**: Reconcile Physical Stock vs System Stock.
 
-## 🛠️ Configuration (Email)
-To use Automated Email Reports, go to **Settings** and configure:
-*   **Email Sender**: Your Gmail address.
-*   **App Password**: Google Account > Security > App Passwords (NOT your login password).
-*   **Recipient**: Owner's email.
+### 6. **Inventory Management**
+*   **CRUD Products** & **Barcode Generator**.
+*   **Bulk Import** (Excel/CSV) & **Low Stock Alerts**.
+
+## 🛠️ Configuration
+*   **Email**: Configure Gmail App Password in Settings.
+*   **Daily Target**: Set your sales goal in Settings to activate Gamification bar.
 
 ## 🛠️ Installation
 

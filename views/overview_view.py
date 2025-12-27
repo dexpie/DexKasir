@@ -36,9 +36,27 @@ class OverviewView(ctk.CTkFrame):
         self.create_card(frame_cards, "Transaksi Hari Ini", f"{txn_count} Trx", "#2196F3", 1)
         self.create_card(frame_cards, "Stok Menipis", f"{low_stock} Item", "#FF9800", 2)
         
+        
         # -- FORECAST CHART --
         frame_chart = ctk.CTkFrame(self)
         frame_chart.pack(fill="both", expand=True, pady=20)
+        
+        # Gamification: Daily Target
+        target = 5000000 # Default 5 Juta
+        try:
+            from models.settings import SettingsModel
+            target = SettingsModel().get("daily_target") or 5000000
+        except: pass
+        
+        percent = min(1.0, daily_sales / target)
+        color = "red"
+        if percent > 0.5: color = "orange"
+        if percent >= 1.0: color = "#4CAF50" # Green
+        
+        ctk.CTkLabel(frame_chart, text=f"Daily Target Progress: {format_rupiah(daily_sales)} / {format_rupiah(target)} ({int(percent*100)}%)", font=("Roboto", 14)).pack(anchor="w", padx=10, pady=(10,5))
+        progress = ctk.CTkProgressBar(frame_chart, progress_color=color)
+        progress.pack(fill="x", padx=10, pady=(0, 20))
+        progress.set(percent)
         
         ctk.CTkLabel(frame_chart, text="Analisa Penjualan & Prediksi AI", font=("Roboto Medium", 16)).pack(pady=10)
         

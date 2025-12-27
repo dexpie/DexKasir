@@ -28,6 +28,8 @@ class TransactionView(ctk.CTkFrame):
         
         self.customer_display_window = None # Toplevel reference
         
+        self.setup_hotkeys()
+        
         self.cart = []
         self.discount_percent = 0
         self.promo_discount = 0 # Rupiah value from promo code
@@ -333,6 +335,18 @@ class TransactionView(ctk.CTkFrame):
             self.update_customer_display() # Sync immediately
         else:
             self.customer_display_window.focus()
+
+    def setup_hotkeys(self):
+        # Bind to root window for global feel within this context
+        root = self.winfo_toplevel()
+        root.bind('<F1>', lambda e: self.entry_search.focus_set())
+        root.bind('<F2>', lambda e: self.entry_barcode.focus_set())
+        root.bind('<F4>', lambda e: self.process_transaction())
+        root.bind('<Delete>', lambda e: self.delete_item())
+        
+        # Tooltip help
+        lbl_help = ctk.CTkLabel(self, text="[F1] Cari  [F2] Barcode  [F4] Bayar  [DEL] Hapus Item", font=("Consolas", 10), text_color="gray")
+        lbl_help.pack(side="bottom", pady=2)
 
     def search_member(self):
         phone = self.entry_member_phone.get()
