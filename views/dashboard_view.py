@@ -11,6 +11,7 @@ from views.audit_view import AuditView
 from views.opname_view import StockOpnameView
 from views.member_view import MemberView
 from views.attendance_view import AttendanceView
+from views.expense_view import ExpenseView
 
 class DashboardView(ctk.CTkToplevel):
     def __init__(self, parent, user):
@@ -71,6 +72,7 @@ class DashboardView(ctk.CTkToplevel):
         self.btn_members = self.create_nav_btn("Members", lambda: self.show_view("members"))
         self.btn_users = self.create_nav_btn("Users", lambda: self.show_view("users"))
         self.btn_promos = self.create_nav_btn("Promos", lambda: self.show_view("promos"))
+        self.btn_expenses = self.create_nav_btn("Beban (Expenses)", lambda: self.show_view("expenses"))
         self.btn_opname = self.create_nav_btn("Stock Opname", lambda: self.show_view("opname"))
         self.btn_audit = self.create_nav_btn("Audit Logs", lambda: self.show_view("audit"))
         self.btn_settings = self.create_nav_btn("Pengaturan", lambda: self.show_view("settings"))
@@ -81,7 +83,9 @@ class DashboardView(ctk.CTkToplevel):
             self.btn_products.pack_forget()
             self.btn_users.pack_forget()
             self.btn_promos.pack_forget()
+            self.btn_expenses.pack_forget()
             self.btn_opname.pack_forget()
+            self.btn_audit.pack_forget()
             self.btn_audit.pack_forget()
             self.btn_settings.pack_forget()
             self.btn_history.pack_forget()
@@ -128,6 +132,8 @@ class DashboardView(ctk.CTkToplevel):
             MemberView(self.main_frame)
         elif view_name == "attendance":
             AttendanceView(self.main_frame, self.user)
+        elif view_name == "expenses":
+            ExpenseView(self.main_frame, self.user)
 
     def logout(self):
         self.destroy()

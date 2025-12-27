@@ -7,33 +7,30 @@
 ## 🚀 Key Features
 
 ### 1. **Core Transaction & Finance** 💸
+*   **True Profit Tracking**: Tracks COGS and **Operational Expenses** (Rent, Salary, etc) for accurate Net Profit calculation. 🆕
 *   **Kasbon System**: Manage member debts directly.
-*   **Automated Email Reports**: Daily sales recap sent to owner.
-*   **Speed Mode (Hotkeys)**: Use `F1` (Search), `F2` (Barcode), `F4` (Pay) for lightning-fast checkout. 🆕
+*   **Speed Mode (Hotkeys)**: `F1` Search, `F2` Barcode, `F4` Pay.
 
-### 2. **HR & People Management** 👥
-*   **Employee Attendance**: Digital Clock In/Clock Out system for staff. 🆕
-*   **Sales Gamification**: Visual Progress Bar showing Real-time Sales vs Daily Target to motivate team. 🆕
+### 2. **Artificial Intelligence (AI) & Analytics** 🤖
+*   **Sales Forecasting**: Predicts future sales trend.
+*   **Peak Hour Heatmap**: Visual bar chart showing the **busiest hours** of the day. 🆕
+*   **Sales Gamification**: Real-time progress bar vs Daily Target.
 
-### 3. **Artificial Intelligence (AI)** 🤖
-*   **Sales Forecasting**: Uses Linear Regression to predict sales trend.
-*   **Smart Dashboard**: Overview card showing predicted vs actual performance.
+### 3. **HR & People Management** 👥
+*   **Employee Attendance**: Digital Clock In/Clock Out system.
+*   **Audit Logger**: Logs sensitive actions (Void, Delete Product).
 
 ### 4. **Hardware Support** 🖥️
 *   **Dual Screen**: Customer Facing Display (CFD).
 *   **Receipt Printer**: Auto-print receipt + Generate QR Code.
 
-### 5. **Security & Loss Prevention** 👮‍♂️
-*   **Audit Logger**: Records every sensitive action.
-*   **Stock Opname**: Reconcile Physical Stock vs System Stock.
-
-### 6. **Inventory Management**
-*   **CRUD Products** & **Barcode Generator**.
-*   **Bulk Import** (Excel/CSV) & **Low Stock Alerts**.
+### 5. **Inventory & Stock** 📦
+*   **Stock Opname**: Reconcile Physical Stock.
+*   **Bulk Import** & **Low Stock Alerts**.
 
 ## 🛠️ Configuration
-*   **Email**: Configure Gmail App Password in Settings.
-*   **Daily Target**: Set your sales goal in Settings to activate Gamification bar.
+*   **Email Reports**: Configure in Settings.
+*   **Expenses**: Input daily costs in the new "Beban" menu.
 
 ## 🛠️ Installation
 
