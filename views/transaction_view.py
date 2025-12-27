@@ -10,8 +10,8 @@ from utils.scanner import BarcodeScanner
 from utils.printer import ReceiptPrinter
 
 from models.member import MemberModel
-
 from models.promo import PromoModel
+from views.customer_display import CustomerDisplay
 
 class TransactionView(ctk.CTkFrame):
     def __init__(self, parent, user):
@@ -25,6 +25,8 @@ class TransactionView(ctk.CTkFrame):
         self.member_model = MemberModel()
         self.promo_model = PromoModel()
         self.printer = ReceiptPrinter(self.settings_model)
+        
+        self.customer_display_window = None # Toplevel reference
         
         self.cart = []
         self.discount_percent = 0
@@ -98,6 +100,7 @@ class TransactionView(ctk.CTkFrame):
         self.lbl_member_info.pack(side="right", padx=10)
 
         ctk.CTkLabel(frame_right, text="Keranjang Belanja", font=("Roboto Medium", 16)).pack(pady=(5,10))
+        ctk.CTkButton(frame_right, text="Buka Layar Customer", command=self.open_customer_display, height=24, font=("Roboto", 10)).pack(anchor="e", padx=10)
 
         # Treeview (Cart)
         frame_cart_list = ctk.CTkFrame(frame_right)
@@ -299,14 +302,37 @@ class TransactionView(ctk.CTkFrame):
         self.lbl_tax.configure(text=f"Pajak ({self.tax_percent}%): +{format_rupiah(self.tax_amount)}")
         self.lbl_total.configure(text=f"TOTAL: {format_rupiah(self.final_total)}")
         self.calculate_change()
+        self.update_customer_display()
+
+    def update_customer_display(self):
+        if self.customer_display_window and self.customer_display_window.winfo_exists():
+            promo_txt = ""
+            if self.promo_discount > 0:
+                promo_txt = "Diskon Promo Applied!"
+            
+            try:
+                pay = float(self.entry_pay.get()) if self.entry_pay.get() else 0
+                change = pay - self.final_total
+            except:
+                change = 0
+                
+            self.customer_display_window.update_data(self.cart, self.final_total, change, promo_txt)
     
     def calculate_change(self, event=None):
         try:
             pay = float(self.entry_pay.get())
             change = pay - self.final_total
             self.lbl_change.configure(text=f"Kembalian: {format_rupiah(change)}")
+            self.update_customer_display() # Update change in real time
         except ValueError:
             self.lbl_change.configure(text="Kembalian: Rp 0")
+
+    def open_customer_display(self):
+        if self.customer_display_window is None or not self.customer_display_window.winfo_exists():
+            self.customer_display_window = CustomerDisplay(self)
+            self.update_customer_display() # Sync immediately
+        else:
+            self.customer_display_window.focus()
 
     def search_member(self):
         phone = self.entry_member_phone.get()

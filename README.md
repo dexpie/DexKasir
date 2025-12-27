@@ -1,39 +1,37 @@
 # DexKasir 🏪
 
-**DexKasir** is a modern, feature-rich Point of Sale (POS) application built with Python (`CustomTkinter`). It helps small to medium retail businesses manage sales, inventory, and customers efficiently.
+**DexKasir** is a modern, feature-rich Point of Sale (POS) application built with Python (`CustomTkinter`). It helps small to medium retail businesses manage sales, inventory, and customers efficiently. It now includes **Enterprise-Grade AI** and **Dual Screen** support.
 
 ![DexKasir Screenshot](https://via.placeholder.com/800x450?text=DexKasir+Dashboard)
 
 ## 🚀 Key Features
 
-### 1. **Core Transaction System**
+### 1. **Core Transaction System (with Dual Screen)** 🖥️
+*   **Customer Facing Display (CFD)**: Open a second window for customers to see cart items and total in real-time. 🆕
 *   **Fast Checkout**: Scan barcodes or search products instantly.
-*   **Cart Management**: Edit quantities, apply discounts per item or total.
 *   **Flexible Payment**: Support CASH, QRIS, and TRANSFER methods.
-*   **Receipt Printing**: Auto-generate text receipts (`.txt`) and Digital QR receipts (`.png`).
-*   **WhatsApp Share**: Send digital receipts directly to customer's WhatsApp with one click. 🆕
+*   **WhatsApp Share**: Send digital receipts directly to customer's WhatsApp.
 
-### 2. **Inventory Management**
+### 2. **Artificial Intelligence (AI)** 🤖
+*   **Sales Forecasting**: Uses Linear Regression to predict sales trend for the next 7 days based on history.
+*   **Smart Dashboard**: Overview card showing predicted vs actual performance. 🆕
+
+### 3. **Inventory Management**
 *   **CRUD Products**: Add, edit, delete products easily.
-*   **Barcode Support**: Scan existing barcodes or **Generate New Barcode Labels**.
+*   **Barcode Generator**: Generate and print custom barcode labels.
 *   **Bulk Import**: Upload hundreds of products via **Excel/CSV**.
-*   **Low Stock Alert**: Visual highlights and **Dashboard Widgets** when stock runs low (< 5).
-
-### 3. **Membership & Loyalty** 💎
-*   **Member Database**: Register customers by name & phone.
-*   **Loyalty Points**: Auto-earn 1 point for every Rp 10,000 spent.
-*   **Quick Lookup**: Find members by phone number during transaction.
+*   **Low Stock Alert**: Visual highlights and dashboard widgets.
 
 ### 4. **Business Intelligence (Profit & Ops)** 📈
-*   **Command Center Dashboard**: Real-time view of **Daily Sales**, **Transaction Count**, and **Stock Alerts**. 🆕
-*   **Profit Tracking**: Input **Cost Price (Modal)** and track **Net Profit** automatically.
-*   **Shift Management**: "Open Shift" to record start cash and "Close Shift" to verify actual cash vs system.
-*   **Reports**: Monthly sales report, export to **PDF & Excel**.
+*   **Command Center Dashboard**: Real-time stats for Omzet, Transactions, and Stock.
+*   **Profit Tracking**: Track Net Profit (Revenue - Cost).
+*   **Shift Management**: Manage Cash Drawer sessions (Open/Close).
+*   **Reports**: Export to PDF & Excel.
 
 ### 5. **Marketing & Customization** 🎨
-*   **Promo Management**: Dedicated menu to Create/Edit/Delete promo codes (Percentage or Fixed). 🆕
-*   **Receipt Branding**: Customize receipt **Header** (Greeting) and **Footer** (Thank You Message).
-*   **Themes**: Switch between Light, Dark, or System theme.
+*   **Promo Management**: Manage discount codes (`DISKON50`).
+*   **Receipt Branding**: Customize receipt Header/Footer.
+*   **Themes**: Light / Dark Mode.
 
 ## 🛠️ Installation
 
@@ -57,18 +55,6 @@
 ## 🔐 Accounts (Default)
 *   **Username**: `admin`
 *   **Password**: `admin123`
-
-## 📂 Project Structure
-*   `main.py`: Entry point.
-*   `views/`: UI Components (Promo, Overview, Transaction, etc.).
-*   `models/`: Database logic (Promo, Product, User, etc.).
-*   `utils/`: Helpers (Printer, PDF Generator, Migrations).
-*   `database/`: SQLite connection & initialization.
-*   `receipts/`: Saved receipt files.
-*   `backups/`: Database backups.
-
-## 🤝 Contributing
-Feel free to open issues or submit pull requests for new features!
 
 ---
 *Created by [Dexpie](https://github.com/dexpie)*
